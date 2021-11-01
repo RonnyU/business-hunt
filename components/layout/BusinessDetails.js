@@ -1,8 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import Image from 'next/image';
 import styled from '@emotion/styled';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import Link from 'next/link';
 
 const Business = styled.li`
   padding: 4rem;
@@ -95,6 +95,7 @@ const BusinessDetails = ({ business }) => {
     urlImage,
   } = business;
 
+  console.log(urlImage);
   return (
     <Business>
       <BusinessDescription>
@@ -103,7 +104,9 @@ const BusinessDetails = ({ business }) => {
         </div>
 
         <div>
-          <Title>{name}</Title>
+          <Link href='/businesses/[id]' as={`/businesses/${id}`} passHref>
+            <Title>{name}</Title>
+          </Link>
           <TextDesc>{description}</TextDesc>
 
           <Comments>
@@ -115,7 +118,7 @@ const BusinessDetails = ({ business }) => {
               <p>{comments.length} Comments</p>
             </div>
           </Comments>
-          <p>published {formatDistanceToNow(new Date(created))} ago</p>
+          <p>Published {formatDistanceToNow(new Date(created))} ago</p>
         </div>
       </BusinessDescription>
 

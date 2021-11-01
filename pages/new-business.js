@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { useRouter } from 'next/router';
 import Layout from '../components/layout/Layout';
 import { Form, Field, InputSubmit, Error } from '../components/ui/Form';
+import Error404 from '../components/layout/404';
 
 import { FirebaseContext } from '../firebase';
 import { ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
@@ -50,6 +51,11 @@ export default function NewBusiness() {
       likes: 0,
       comments: [],
       created: Date.now(),
+      createdBy: {
+        id: user.uid,
+        name: user.displayName,
+      },
+      likesGivenBy: [],
     };
 
     try {
@@ -128,96 +134,100 @@ export default function NewBusiness() {
   return (
     <div>
       <Layout>
-        <>
-          <h1
-            css={css`
-              text-align: center;
-              margin-top: 5rem;
-            `}
-          >
-            New Business
-          </h1>
-          <Form onSubmit={handleSubmit} noValidate>
-            <fieldset>
-              <legend>General Information</legend>
+        {!user ? (
+          <Error404 />
+        ) : (
+          <>
+            <h1
+              css={css`
+                text-align: center;
+                margin-top: 5rem;
+              `}
+            >
+              New Business
+            </h1>
+            <Form onSubmit={handleSubmit} noValidate>
+              <fieldset>
+                <legend>General Information</legend>
 
-              <Field>
-                <label htmlFor='name'>Name</label>
-                <input
-                  type='text'
-                  id='name'
-                  placeholder='Your Name'
-                  name='name'
-                  value={name}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Field>
-              {error.name && <Error>{error.name}</Error>}
+                <Field>
+                  <label htmlFor='name'>Name</label>
+                  <input
+                    type='text'
+                    id='name'
+                    placeholder='Name of the product'
+                    name='name'
+                    value={name}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Field>
+                {error.name && <Error>{error.name}</Error>}
 
-              <Field>
-                <label htmlFor='company'>Company</label>
-                <input
-                  type='text'
-                  id='company'
-                  placeholder='Company Name'
-                  name='company'
-                  value={company}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Field>
-              {error.company && <Error>{error.company}</Error>}
+                <Field>
+                  <label htmlFor='company'>Company</label>
+                  <input
+                    type='text'
+                    id='company'
+                    placeholder='Company Name'
+                    name='company'
+                    value={company}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Field>
+                {error.company && <Error>{error.company}</Error>}
 
-              <Field>
-                <label htmlFor='image'>Image</label>
-                <input
-                  accept='image/*'
-                  onChange={handleUpload}
-                  type='file'
-                  id='image'
-                  name='image'
-                />
-              </Field>
+                <Field>
+                  <label htmlFor='image'>Image</label>
+                  <input
+                    accept='image/*'
+                    onChange={handleUpload}
+                    type='file'
+                    id='image'
+                    name='image'
+                  />
+                </Field>
 
-              <Field>
-                <label htmlFor='url'>Url</label>
-                <input
-                  type='url'
-                  id='url'
-                  name='url'
-                  placeholder='URL of your business'
-                  value={url}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Field>
-              {error.url && <Error>{error.url}</Error>}
-            </fieldset>
+                <Field>
+                  <label htmlFor='url'>Url</label>
+                  <input
+                    type='url'
+                    id='url'
+                    name='url'
+                    placeholder='URL of your business'
+                    value={url}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Field>
+                {error.url && <Error>{error.url}</Error>}
+              </fieldset>
 
-            <fieldset>
-              <legend>About your Business</legend>
+              <fieldset>
+                <legend>About your Business</legend>
 
-              <Field>
-                <label htmlFor='description'>Description</label>
-                <textarea
-                  id='description'
-                  name='description'
-                  value={description}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Field>
-              {error.description && <Error>{error.description}</Error>}
-            </fieldset>
+                <Field>
+                  <label htmlFor='description'>Description</label>
+                  <textarea
+                    id='description'
+                    name='description'
+                    value={description}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Field>
+                {error.description && <Error>{error.description}</Error>}
+              </fieldset>
 
-            <InputSubmit
-              type='submit'
-              value='Create Business'
-              disabled={uploading}
-            />
-          </Form>
-        </>
+              <InputSubmit
+                type='submit'
+                value='Create Business'
+                disabled={uploading}
+              />
+            </Form>
+          </>
+        )}
       </Layout>
     </div>
   );

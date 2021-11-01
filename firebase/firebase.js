@@ -1,5 +1,18 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc, getDocs } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  getDoc,
+  updateDoc,
+  increment,
+  arrayUnion,
+  deleteDoc,
+  query,
+  orderBy,
+} from 'firebase/firestore';
 import {
   getStorage,
   ref,
@@ -48,10 +61,14 @@ class Firebase {
     return await addDoc(collection(this.db, 'business'), business);
   }
 
-  async getBusinesses() {
-    const query = await getDocs(collection(this.db, 'business'));
+  async getBusinesses(sort) {
+    //const coll = await getDocs(collection(this.db, 'business'));
 
-    const businesses = query.docs.map((doc) => {
+    const refbusinesses = await getDocs(
+      query(collection(this.db, 'business'), orderBy(sort, 'desc'))
+    );
+
+    const businesses = refbusinesses.docs.map((doc) => {
       return {
         id: doc.id,
         ...doc.data(),
@@ -59,6 +76,42 @@ class Firebase {
     });
 
     return businesses;
+  }
+
+  async getBusiness(id) {
+    const docRef = doc(this.db, 'business', id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    } else {
+      // doc.data() will be undefined in this case
+      console.log('No such document!');
+      return 0;
+    }
+  }
+
+  async updateLikes(id, userId) {
+    const docRef = doc(this.db, 'business', id);
+
+    // Atomically increment the likes  by 1.
+    await updateDoc(docRef, {
+      likesGivenBy: arrayUnion(userId),
+      likes: increment(1),
+    });
+  }
+
+  async updateComments(id, newComments) {
+    const docRef = doc(this.db, 'business', id);
+
+    // Atomically increment the likes  by 1.
+    await updateDoc(docRef, {
+      comments: newComments,
+    });
+  }
+
+  async deleteDocument(id) {
+    await deleteDoc(doc(this.db, 'business', id));
   }
   // async saveImage(file) {
   //   const storageRef = ref(this.storage, 'business/' + file.name);

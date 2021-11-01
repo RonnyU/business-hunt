@@ -39,7 +39,7 @@ export const InputSubmit = styled.input`
   width: 100%;
   padding: 1.5rem;
   text-align: center;
-  color: #fff;
+  color: #403f45;
   font-size: 1.8rem;
   text-transform: uppercase;
   border: none;
@@ -59,7 +59,7 @@ export const InputSubmit = styled.input`
 `;
 
 export const Error = styled.p`
-  background-color: red;
+  background-color: #da552f;
   padding: 1rem;
   font-family: 'PT Sans', sans-serif;
   font-weight: 700;

@@ -8,7 +8,7 @@ function MyApp({ Component, pageProps }) {
   //console.log(user);
   return (
     <FirebaseContext.Provider value={{ firebaseClass, user }}>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </FirebaseContext.Provider>
   );
 }

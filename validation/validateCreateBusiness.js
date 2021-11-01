@@ -3,19 +3,13 @@ export default function validateCreateBusiness(values) {
 
   if (!values.name) {
     errors.name = 'The Name is required';
-  }
-
-  if (!values.company) {
+  } else if (!values.company) {
     errors.company = 'The name of the company is required';
-  }
-
-  if (!values.url) {
+  } else if (!values.url) {
     errors.url = 'The URL of the company is required';
   } else if (!/^(ftp|http|https):\/\/[^ "]+$/.test(values.url)) {
     errors.url = 'URL invalid';
-  }
-
-  if (!values.description) {
+  } else if (!values.description) {
     errors.description = 'Add a description of your company';
   }
 
